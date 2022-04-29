@@ -19,6 +19,7 @@ rollbar.log('Hello world!');
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.html'));
+  rollbar.info('html file served successfully');
 });
 app.get('/styles', (req, res) => {
   res.sendFile(path.join(__dirname, '/public/index.css'));
@@ -30,6 +31,7 @@ app.get('/api/robots', (req, res) => {
   try {
     res.status(200).send(botsArr);
   } catch (error) {
+    rollbar.log('Get all robots failed');
     console.log('ERROR GETTING BOTS', error);
     res.sendStatus(400);
   }
@@ -97,6 +99,7 @@ app.get('/api/player', (req, res) => {
 
 const port = process.env.PORT || 3000;
 
+app.use(rollbar.errorHandler());
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
